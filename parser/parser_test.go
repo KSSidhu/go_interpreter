@@ -475,6 +475,43 @@ func TestIfElseExpression(t *testing.T) {
 	}
 }
 
+func TestFunctionLiteralParsing(t *testing.T) {
+	tests := []struct {
+		input          string
+		expectedParams []string
+	}{
+		{input: "fn() {}", expectedParams: []string{}},
+		{input: "fn(x) {}", expectedParams: []string{"x"}},
+		{input: "fn(x, y, z) {}", expectedParams: []string{"x", "y", "z"}},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := New(l)
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+
+		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+		if !ok {
+			t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
+				program.Statements[0])
+		}
+
+		function, ok := stmt.Expression.(*ast.FunctionLiteral)
+		if !ok {
+			t.Fatalf("stmt.Expression is not ast.FunctionLiteral. got=%T", stmt.Expression)
+		}
+
+		if len(function.Parameters) != len(tt.expectedParams) {
+			t.Fatalf("function literal parameters wrong. want %d, got=%d\n", len(tt.expectedParams), len(function.Parameters))
+		}
+
+		for i, ident := range tt.expectedParams {
+			testLiteralExpression(t, function.Parameters[i], ident)
+		}
+	}
+}
+
 func testLetStatement(t *testing.T, stmt ast.Statement, name string) bool {
 	if stmt.TokenLiteral() != "let" {
 		t.Errorf("s.TokenLiteral not 'let'. got=%q", stmt.TokenLiteral())
