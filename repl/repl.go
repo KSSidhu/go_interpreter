@@ -7,6 +7,7 @@ import (
 
 	"github.com/KSSidhu/go-interpreter/evaluator"
 	"github.com/KSSidhu/go-interpreter/lexer"
+	"github.com/KSSidhu/go-interpreter/object"
 	"github.com/KSSidhu/go-interpreter/parser"
 )
 
@@ -27,6 +28,7 @@ const PROMPT = ">> "
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
+	env := object.NewEnvironment()
 
 	// Read from input until hitting a new line
 	for {
@@ -48,7 +50,7 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		evaluated := evaluator.Eval(program)
+		evaluated := evaluator.Eval(program, env)
 		if evaluated != nil {
 			io.WriteString(out, evaluated.Inspect())
 			io.WriteString(out, "\n")
