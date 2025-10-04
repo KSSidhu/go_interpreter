@@ -55,6 +55,9 @@ const (
 	TRUE     = "TRUE"
 	FALSE    = "FALSE"
 	RETURN   = "RETURN"
+
+  // Data types
+  STRING = "STRING"
 )
 
 func LookupIdent(ident string) TokenType {
