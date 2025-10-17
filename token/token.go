@@ -42,10 +42,12 @@ const (
 	COMMA     = ","
 	SEMICOLON = ";"
 
-	LPAREN = "("
-	RPAREN = ")"
-	LBRACE = "{"
-	RBRACE = "}"
+	LPAREN   = "("
+	RPAREN   = ")"
+	LBRACE   = "{"
+	RBRACE   = "}"
+	LBRACKET = "["
+	RBRACKET = "]"
 
 	// Keywords
 	FUNCTION = "FUNCTION"
@@ -56,8 +58,8 @@ const (
 	FALSE    = "FALSE"
 	RETURN   = "RETURN"
 
-  // Data types
-  STRING = "STRING"
+	// Data types
+	STRING = "STRING"
 )
 
 func LookupIdent(ident string) TokenType {
